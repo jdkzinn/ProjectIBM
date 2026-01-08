@@ -1,4 +1,5 @@
-# Crud pro FASTAPI (roteamento e etc) para operações na tabela clientes
+#                 Crud pro FASTAPI (rotas e etc) para operações na tabela clientes
+#                               py -m uvicorn main:app --reload
 
 from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import JSONResponse
@@ -10,15 +11,23 @@ from app import crud
 from app.database import conn
 
 app = FastAPI(
-    title="Service Storage",
-    description="Serviço de armazenamento de clientes",
+    title="Service Storage Javer Bank",
+    description="Banco Javer - Serviço de Armazenamento de Clientes",
     version="1.0.0"
 )
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Javer Bank Storage Service API"}
+
+@app.get("/health")
+def health_check():
+    # Verificando a saúde da API
+    return {"status": "OK ✅", "service": "Storage 💾"}
 
 @app.get("/customers", response_model=List[CustomerOut])
 def list_customers():
-    """Lista todos os clientes."""
+    # Listando todos os clientes
     try:
         customers = crud.list_customers(conn)
         return customers
@@ -31,7 +40,7 @@ def list_customers():
 
 @app.get("/customers/{customer_id}", response_model=CustomerOut)
 def get_customer(customer_id: int):
-    """Obtém um cliente específico por ID."""
+    # Obtendo um cliente específico por ID
     try:
         customer = crud.get_customer(conn, customer_id)
         if not customer:
@@ -48,10 +57,9 @@ def get_customer(customer_id: int):
             detail=f"Erro ao buscar cliente: {str(e)}"
         )
 
-
 @app.post("/customers", response_model=CustomerOut, status_code=status.HTTP_201_CREATED)
 def create_customer(customer: CustomerCreate):
-    """Cria um novo cliente."""
+    # Criando um novo cliente
     try:
         new_customer = crud.create_customer(conn, customer.model_dump())
         return new_customer
@@ -74,7 +82,7 @@ def create_customer(customer: CustomerCreate):
 
 @app.put("/customers/{customer_id}", response_model=CustomerOut)
 def update_customer(customer_id: int, customer: CustomerUpdate):
-    """Atualiza um cliente existente."""
+    # Atualizando um cliente existente (where id)
     try:
         updated_customer = crud.update_customer(
             conn, customer_id, customer.model_dump(exclude_unset=True)
@@ -101,7 +109,7 @@ def update_customer(customer_id: int, customer: CustomerUpdate):
 
 @app.delete("/customers/{customer_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_customer(customer_id: int):
-    """Deleta um cliente."""
+    # Deletando um cliente (where id)
     try:
         result = crud.delete_customer(conn, customer_id)
         if not result:
@@ -116,9 +124,3 @@ def delete_customer(customer_id: int):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erro ao deletar cliente: {str(e)}"
         )
-
-
-@app.get("/health")
-def health_check():
-    """Verificação de saúde da API."""
-    return {"status": "ok", "service": "storage"}

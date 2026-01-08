@@ -1,6 +1,11 @@
 import sqlite3
+from pathlib import Path
 
-conn = sqlite3.connect("projectibm.db")
+BASE_DIR = Path(__file__).resolve().parent
+DB_PATH = BASE_DIR / "projectibm.db"
+
+# Conexão global (para apresentação / exemplo)
+conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
 conn.row_factory = sqlite3.Row
 cursor = conn.cursor()
 
@@ -14,10 +19,9 @@ sql_clientes = """
         saldo_cc FLOAT NOT NULL CHECK (saldo_cc >= 0)
     );
 """
-cursor.execute(sql_clientes) 
+cursor.execute(sql_clientes)
 
-print("Banco ''projectibm.db'' e tabela ''clientes'' criados com sucesso")
+print("Banco 'projectibm.db' e tabela 'clientes' verificados/criados com sucesso")
 
 conn.commit()
-
-conn.close()
+cursor.close()
