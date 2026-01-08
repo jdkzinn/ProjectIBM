@@ -1,4 +1,4 @@
-# Crud pro FASTAPI (rotas e etc) para operações na tabela clientes
+# Crud pro FASTAPI (roteamento e etc) para operações na tabela clientes
 
 from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import JSONResponse
