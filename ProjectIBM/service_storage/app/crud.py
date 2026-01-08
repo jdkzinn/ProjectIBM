@@ -1,9 +1,11 @@
+# Crud pro SQLite3 para operações ta tabela clientes
+
 import sqlite3
 from typing import Optional, List, Dict, Any
 
 
 def _row_to_dict(row: sqlite3.Row) -> Dict[str, Any]:
-    """Converte uma linha SQLite Row para dicionário."""
+    """Converti uma linha SQLite Row para dicionário."""
     return dict(row)
 
 
